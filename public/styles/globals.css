@@ -3,31 +3,103 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+  --secondary-glow: conic-gradient(
+    from 0deg at 50% 50%,
+    #a8ff78 0deg,
+    #78ffd6 90deg,
+    #21d4fd 180deg,
+    #b721ff 270deg,
+    transparent 360deg
+  );
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  --third-glow: conic-gradient(
+    from 180deg at 50% 50%,
+    #f9ff7b 0deg,
+    #fbae3c 70deg,
+    #ff517f 130deg,
+    #c94b4b 200deg,
+    transparent 360deg
+  );
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .gradient-text {
+    @apply bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent;
+  }
+}
+
+#hero_section {
+  z-index: 10;
+  overflow: hidden;
+}
+
+#hero_section::before,
+#hero_section::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+#hero_section::before {
+  background: var(--third-glow);
+  border-radius: 50%;
+  /* width: 500px;
+  height: 700px; */
+  width: 20vw;
+  height: 20vw;
+  margin-left: -200px;
+  filter: blur(90px);
+  top: calc(50vh - 25vw); /* Adjusting for correct centering */
+  left: calc(50vw);
+  animation: animateBefore 7s cubic-bezier(0.47, 0, 0.745, 0.715) infinite;
+}
+
+#hero_section::after {
+  background: var(--secondary-glow);
+  border-radius: 50%;
+  width: 500px;
+  height: 700px;
+  filter: blur(90px);
+  top: calc(50vh - 25vw); /* Adjusting for correct centering */
+  left: calc(50vw - 25vw);
+  animation: animateAfter 7s cubic-bezier(0.47, 0, 0.745, 0.715) infinite;
+}
+
+.gradient-border {
+  border: 2px solid; /* Width of the border */
+  border-image-source: linear-gradient(45deg, #c084fc, #3b82f6);
+}
+
+@keyframes animateBefore {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(200px) scale(1.2) rotate(-160deg);
+  }
+  80% {
+    transform: translateY(-400px) scale(0.5) rotate(160deg);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes animateAfter {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-250px) scale(1.2) rotate(160deg);
+  }
+  50% {
+    transform: translateX(250px) scale(0.8) rotate(-160deg);
+  }
+  75% {
+    transform: translateX(500px) scale(1.2) rotate(160deg);
+  }
+  100% {
+    transform: translateX(0);
   }
 }

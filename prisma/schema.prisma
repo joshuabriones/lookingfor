@@ -1,98 +1,89 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  // provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id          String       @id @default(uuid())
-  email       String       @unique
-  password    String
-  role        Role
-  profile     Profile?
-  jobs        Job[]        @relation("JobPoster")
-  applications Application[]
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String?
+  role          Role?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  isDeleted     Boolean        @default(false)
+  applications  Application[]
+  jobs          Job[]          
   notifications Notification[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  profile       Profile?
 
   @@map("users")
 }
 
 model Profile {
-  id          String       @id @default(uuid())
-  firstName   String
-  lastName    String
-  bio         String?
-  userId      String       @unique
-  user        User         @relation(fields: [userId], references: [id])
+  id        String  @id @default(uuid())
+  firstName String
+  lastName  String
+  image     String? @db.VarChar(255)
+  bio       String?
+  userId    String  @unique
+  user      User    @relation(fields: [userId], references: [id])
+  isDeleted Boolean @default(false)
 
   @@map("profiles")
 }
 
 model Job {
-  id          String       @id @default(uuid())
-  title       String
-  description String
+  id           String        @id @default(uuid())
+  title        String
+  description  String
   requirements String
-  salary      Float
-  location    String
-  deadline    DateTime
-  employerId  String
-  employer    User         @relation("JobPoster", fields: [employerId], references: [id])
+  salary       Float
+  location     String
+  image        String?       @db.VarChar(255)
+  deadline     DateTime
+  employerId   String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  isDeleted    Boolean       @default(false)
   applications Application[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  employer     User          @relation(fields: [employerId], references: [id])
 
   @@map("jobs")
 }
 
 model Application {
-  id          String       @id @default(uuid())
+  id          String            @id @default(uuid())
   jobId       String
-  job         Job          @relation(fields: [jobId], references: [id])
   userId      String
-  user        User         @relation(fields: [userId], references: [id])
   resumeUrl   String
   coverLetter String
   status      ApplicationStatus @default(PENDING)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  isDeleted   Boolean           @default(false)
+  job         Job               @relation(fields: [jobId], references: [id])
+  user        User              @relation(fields: [userId], references: [id])
 
   @@map("applications")
 }
 
 model Notification {
-  id          String       @id @default(uuid())
-  message     String
-  read        Boolean      @default(false)
-  userId      String
-  user        User         @relation(fields: [userId], references: [id])
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id        String   @id @default(uuid())
+  message   String
+  read      Boolean  @default(false)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
 
   @@map("notifications")
 }
-
-// model Admin {
-//   id          String       @id @default(uuid())
-//   userId      String
-//   user        User         @relation(fields: [userId], references: [id])
-//   createdAt   DateTime     @default(now())
-//   updatedAt   DateTime     @updatedAt
-
-//   @@map("admins")
-// }
 
 enum Role {
   ADMIN
