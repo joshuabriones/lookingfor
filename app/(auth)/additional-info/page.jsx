@@ -1,8 +1,9 @@
+// app/(auth)/additional-info/page.js
 "use client";
 
 import Link from "next/link";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
 import toast from "react-hot-toast";
 import { useSession, signOut } from "next-auth/react";
 
@@ -16,7 +17,7 @@ const AdditionalInfoContent = () => {
   const [lname, setLname] = useState("");
   const [role, setRole] = useState("");
 
-  console.log("session user: ", session?.user.role);
+  console.log("session user: ", session?.user?.role);
 
   const submitData = async (e) => {
     e.preventDefault();
@@ -49,7 +50,7 @@ const AdditionalInfoContent = () => {
         toast.error("Failed to create user profile");
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -173,4 +174,10 @@ const AdditionalInfoContent = () => {
   );
 };
 
-export default AdditionalInfoContent;
+const AdditionalInfoPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <AdditionalInfoContent />
+  </Suspense>
+);
+
+export default AdditionalInfoPage;
