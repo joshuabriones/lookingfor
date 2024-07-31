@@ -25,7 +25,9 @@ const JobPage = () => {
   console.log(jobs);
 
   return (
-    <div className="max-w-screen-md mx-auto min-h-screen px-8 py-10 text-slate-700"></div>
+    <div className="max-w-screen-md mx-auto min-h-screen px-8 py-10 text-slate-700">
+      {jobs.title}
+    </div>
   );
 };
 

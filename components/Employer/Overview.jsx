@@ -35,7 +35,7 @@ const Overview = () => {
         Here's your activities and applications
       </p>
 
-      <div className="flex gap-6 items-start mt-6">
+      <div className="flex md:gap-6 gap-2 items-start mt-6 flex-col sm:flex-row">
         <div className="flex gap-20 bg-indigo-100 px-4 py-4 rounded-md">
           <div className="flex flex-col justify-between ">
             <h4 className="font-medium text-2xl">{openJobs}</h4>
@@ -50,7 +50,7 @@ const Overview = () => {
             />
           </div>
         </div>
-        <div className="flex gap-20 bg-purple-100 px-4 py-4 rounded-md">
+        <div className="flex md:gap-20 gap-[74px] bg-purple-100 px-4 py-4 rounded-md ">
           <div className="flex flex-col justify-between ">
             <h4 className="font-medium text-2xl">{candidates}</h4>
             <p className="text-sm text-slate-500">Candidates</p>

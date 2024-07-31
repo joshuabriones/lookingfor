@@ -36,8 +36,8 @@ const Navbar = () => {
     case "JOB_SEEKER":
       navLinks = [
         { name: "Home", href: "/dashboard" },
-        { name: "Find Work", href: "#" },
-        { name: "Applied Jobs", href: "#" },
+        { name: "Find Work", href: "/findwork" },
+        { name: "Applied Jobs", href: "/appliedjobs" },
       ];
       break;
     case "EMPLOYER":
@@ -74,14 +74,14 @@ const Navbar = () => {
               <ul className="flex items-center gap-6 text-sm">
                 {navLinks.map((link) => (
                   <li key={link.name}>
-                    <a
+                    <Link
                       className={`text-gray-500 hover:gradient-text ${
                         pathname === link.href ? "gradient-text" : ""
                       }`}
                       href={link.href}
                     >
                       {link.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

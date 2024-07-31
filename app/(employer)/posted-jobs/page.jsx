@@ -4,6 +4,9 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { imageDB } from "@/lib/firebase/config";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
 
 import Loading from "@/components/Loading";
 
@@ -61,16 +64,29 @@ const PostedJobs = () => {
 export default PostedJobs;
 
 function CardBlogAction({ job, fetchPostedJobs }) {
-  const [newPost, setNewPost] = useState({
-    title: "",
-    description: "",
-    deadline: "",
-    salary: "",
-    location: "",
-    requirements: "",
-    image: "",
-  });
+  const [title, setTitle] = useState(job.title);
+  const [description, setDescription] = useState(job.description);
+  const [deadline, setDeadline] = useState(formatDateForInput(job.deadline));
+  const [salary, setSalary] = useState(job.salary);
+  const [location, setLocation] = useState(job.location);
+  const [requirements, setRequirements] = useState(job.requirements);
+  const [image, setImage] = useState(job.image);
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const [isEditing, setIsEditing] = useState(false);
+
+  const handleSelectedImage = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imgsRef = ref(imageDB, `jobposts/${v4()}`);
+      const snapshot = await uploadBytesResumable(imgsRef, file);
+      const imgUrl = await getDownloadURL(snapshot.ref);
+      setImage(imgUrl);
+      setSelectedImage(file);
+    }
+  };
+
+  console.log("UPDATED IMAGE: ", image);
 
   function formatDateForInput(dateString) {
     if (!dateString) return ""; // Return an empty string if dateString is not provided
@@ -86,9 +102,18 @@ function CardBlogAction({ job, fetchPostedJobs }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newPost),
+        body: JSON.stringify({
+          title,
+          description,
+          deadline,
+          salary,
+          location,
+          requirements,
+          image,
+        }),
       });
       const data = await res.json();
+
       if (res.ok) {
         fetchPostedJobs();
         toast.success("Job updated successfully");
@@ -106,7 +131,7 @@ function CardBlogAction({ job, fetchPostedJobs }) {
         method: "DELETE",
       });
       const data = await res.json();
-      console.log(data);
+
       if (res.ok) {
         fetchPostedJobs();
         toast.success("Job deleted successfully");
@@ -117,20 +142,6 @@ function CardBlogAction({ job, fetchPostedJobs }) {
       console.log(e);
     }
   };
-
-  useEffect(() => {
-    setNewPost({
-      title: job.title,
-      description: job.description,
-      deadline: formatDateForInput(job.deadline),
-      salary: job.salary,
-      location: job.location,
-      requirements: job.requirements,
-      image: job.image || "",
-    });
-  }, [isEditing]);
-
-  console.log(newPost);
 
   return (
     <>
@@ -194,75 +205,74 @@ function CardBlogAction({ job, fetchPostedJobs }) {
 
         {isEditing && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded shadow-lg w-1/2">
+            <div className="bg-white p-6 rounded shadow-lg md:h-3/4 h-1/2 overflow-scroll w-3/4 md:w-1/2">
+              <label>Title</label>
               <input
                 type="text"
                 placeholder="Title"
-                value={newPost.title}
-                onChange={(e) =>
-                  setNewPost((prev) => ({ ...prev, title: e.target.value }))
-                }
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 className="w-full p-2 mt-2 border border-gray-300 rounded"
               />
+              <label className="block mt-4">Description</label>
               <textarea
                 placeholder="Description"
-                value={newPost.description}
-                onChange={(e) =>
-                  setNewPost((prev) => ({
-                    ...prev,
-                    description: e.target.value,
-                  }))
-                }
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 className="w-full p-2 mt-2 border border-gray-300 rounded"
               />
+              <label className="block mt-4">Deadline</label>
               <input
                 type="date"
                 placeholder="Deadline"
-                value={newPost.deadline}
-                onChange={(e) =>
-                  setNewPost((prev) => ({ ...prev, deadline: e.target.value }))
-                }
+                value={deadline}
+                onChange={(e) => setDeadline(e.target.value)}
                 className="w-full p-2 mt-2 border border-gray-300 rounded"
               />
+              <label className="block mt-4">Salary</label>
               <input
                 type="number"
                 placeholder="Salary"
-                value={newPost.salary}
-                onChange={(e) =>
-                  setNewPost((prev) => ({ ...prev, salary: e.target.value }))
-                }
+                value={salary}
+                onChange={(e) => setSalary(e.target.value)}
                 className="w-full p-2 mt-2 border border-gray-300 rounded"
               />
+              <label className="block mt-4">Location</label>
               <input
                 type="text"
                 placeholder="Location"
-                value={newPost.location}
-                onChange={(e) =>
-                  setNewPost((prev) => ({ ...prev, location: e.target.value }))
-                }
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
                 className="w-full p-2 mt-2 border border-gray-300 rounded"
               />
+              <label className="block mt-4">Requirements</label>
               <input
                 type="text"
                 placeholder="Requirements"
-                value={newPost.requirements}
-                onChange={(e) =>
-                  setNewPost((prev) => ({
-                    ...prev,
-                    requirements: e.target.value,
-                  }))
-                }
+                value={requirements}
+                onChange={(e) => setRequirements(e.target.value)}
                 className="w-full p-2 mt-2 border border-gray-300 rounded"
               />
+              <label className="block mt-4">Image</label>
               <input
+                type="file"
+                onChange={handleSelectedImage}
+                accept="image/*"
+                id="bannerImage"
+                className="mt-1 w-full py-2 px-4 text-gray-400 rounded-md border border-gray-200 shadow-sm peer order-2 [&::file-selector-button]:hidden sm:text-sm"
+              />
+              {/* <input
                 type="text"
                 placeholder="Image"
-                value={newPost.image}
+                value={image}
                 onChange={(e) =>
-                  setNewPost((prev) => ({ ...prev, image: e.target.value }))
+                  setImage(
+                    e.target.value ||
+                      "https://via.placeholder.com/150?text=No+Image"
+                  )
                 }
                 className="w-full p-2 mt-2 border border-gray-300 rounded"
-              />
+              /> */}
               <div className="flex justify-between mt-4">
                 <button
                   onClick={handleUpdate}

@@ -54,6 +54,7 @@ export default function Home() {
         <div className="flex flex-col gap-20 sm:gap-10 items-center">
           {howItWorks.map((work, index) => (
             <div
+              key={index}
               className={`flex md:gap-8 sm:px-1 px-4 gap-0 items-center justify-center md:text-left text-center md:flex-row flex-col ${
                 index % 2 === 0 ? "md:flex-row-reverse" : ""
               }`}

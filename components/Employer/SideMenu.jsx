@@ -2,7 +2,7 @@ import React from "react";
 
 const SideMenu = ({ currentTab, setCurrentTab }) => {
   return (
-    <div className="flex w-[18%] h-auto max-h-48 flex-col justify-between border-e bg-white shadow-md rounded-lg">
+    <div className="flex md:w-[18%] w-full h-auto max-h-48 flex-col justify-between border-e bg-white shadow-md rounded-lg">
       <div className="px-4 py-6">
         <ul className="space-y-1">
           <li>

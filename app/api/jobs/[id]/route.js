@@ -12,7 +12,12 @@ export async function GET(req, { params }) {
       where: { id: id },
       include: {
         employer: {
-          include: {
+          select: {
+            id: true,
+            email: true,
+            createdAt: true,
+            updatedAt: true,
+            role: true,
             profile: true,
           },
         },
@@ -45,17 +50,21 @@ export async function PUT(req, { params }) {
     image,
   } = await req.json();
 
+  // parse salary to float
+  const convertedSalary = parseFloat(salary);
+  const formattedDeadline = new Date(deadline).toISOString();
+
   try {
     const job = await db.job.update({
       where: { id: id },
       data: {
         title,
         description,
-        deadline,
-        salary,
-        location,
         requirements,
-        image,
+        salary: convertedSalary,
+        location,
+        image: image || null,
+        deadline: formattedDeadline,
       },
     });
 

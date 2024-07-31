@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --secondary-glow: conic-gradient(
     from 0deg at 50% 50%,
