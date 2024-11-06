@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import Loading from "../Loading";
 
@@ -35,7 +34,7 @@ const JobSeekerDashboard = () => {
     <div className="max-w-screen-xl py-8 mx-auto ">
       <div className="px-6 pt-8 pb-6 rounded-xl bg-gradient-to-r from-purple-400 to-blue-500 text-white ">
         <h4 className="font-medium md:text-3xl text-2xl">
-          Welcome to L∞kingfor, {session.user.name.split(" ")[0]}
+          Welcome to L∞kingfor, {session.user.name}
         </h4>
         <div className="flex gap-4 mt-6 lg:flex-row flex-col">
           <div className="flex-1 p-4 rounded-lg bg-white bg-opacity-20">

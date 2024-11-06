@@ -29,7 +29,7 @@ const Overview = () => {
   return (
     <div className="flex-1 px-4 py-6 bg-white shadow-md rounded-lg">
       <h3 className="font-semibold text-lg">
-        Hello, {session?.user?.name.split(" ")[0]} 👋
+        Hello, {session?.user?.name} 👋
       </h3>
       <p className="text-sm text-slate-600">
         Here's your activities and applications
