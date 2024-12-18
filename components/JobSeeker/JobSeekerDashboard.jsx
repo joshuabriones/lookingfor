@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import Loading from "../Loading";
 

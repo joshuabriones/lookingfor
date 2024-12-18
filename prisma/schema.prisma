@@ -94,6 +94,6 @@ enum Role {
 enum ApplicationStatus {
   PENDING
   REVIEWED
-  ACCEPTED
-  REJECTED
+  HIRED
+  DECLINED
 }

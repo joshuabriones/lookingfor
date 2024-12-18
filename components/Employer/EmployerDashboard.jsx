@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 
-import SideMenu from "@/components/Employer/SideMenu";
-import Overview from "@/components/Employer/Overview";
+import Applicants from "@/components/Employer/Applicants";
 import Candidates from "@/components/Employer/Candidates";
+import Overview from "@/components/Employer/Overview";
+import SideMenu from "@/components/Employer/SideMenu";
 import ViewAllJobs from "@/components/Employer/ViewAllJobs";
 
 const EmployerDashboard = () => {
@@ -15,6 +16,7 @@ const EmployerDashboard = () => {
       {(currentTab === "overview" || currentTab === "") && <Overview />}
       {currentTab === "candidates" && <Candidates />}
       {currentTab === "jobs" && <ViewAllJobs />}
+      {currentTab === "applicants" && <Applicants />}
     </div>
   );
 };
