@@ -18,9 +18,9 @@ const Signup = () => {
 
   const router = useRouter();
 
-  // if (session) {
-  //   router.push("/dashboard");
-  // }
+  if (session) {
+    router.push("/dashboard");
+  }
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });

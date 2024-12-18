@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { imageDB } from "@/lib/firebase/config";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import { useRouter } from "next/navigation";
 
 import Loading from "@/components/Loading";
 
@@ -14,6 +15,16 @@ const PostedJobs = () => {
   const { data: session, status } = useSession();
   const [postedJobs, setPostedJobs] = useState([{}]);
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
+  if (session && session.user.role === "JOB_SEEKER") {
+    router.push("/dashboard");
+  }
+
+  if (!session && status === "unauthenticated") {
+    router.push("/login");
+  }
 
   const fetchPostedJobs = async () => {
     try {

@@ -1,11 +1,16 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Profile = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
-  console.log(session);
+  const router = useRouter();
+
+  if (!session && status === "unauthenticated") {
+    router.push("/login");
+  }
 
   return (
     <div className="max-w-screen-md py-8 mx-auto px-4">

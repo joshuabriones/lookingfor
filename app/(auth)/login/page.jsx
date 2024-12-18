@@ -16,6 +16,10 @@ const Login = () => {
     password: "",
   });
 
+  if (session) {
+    router.push("/dashboard");
+  }
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -33,10 +37,6 @@ const Login = () => {
       router.push("/dashboard");
     }
   };
-
-  // if (session) {
-  //   router.push("/dashboard");
-  // }
 
   return (
     <>

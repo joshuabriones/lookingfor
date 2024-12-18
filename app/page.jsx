@@ -1,6 +1,13 @@
+"use client";
+
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
   const trendingSearches = ["Freelance", "Remote", "Full-time", "Internship"];
 
   const howItWorks = [
@@ -23,6 +30,11 @@ export default function Home() {
       image: "/assets/images/hero3.png",
     },
   ];
+
+  if (session) {
+    router.push("/dashboard");
+  }
+
   return (
     <div className="relative max-w-screen-2xl min-h-screen mx-auto">
       <section

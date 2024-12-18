@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { formatDistanceToNow, parseISO } from "date-fns";
 
 import Loading from "@/components/Loading";
@@ -11,6 +13,16 @@ const FindWork = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  if (session && session.user.role === "EMPLOYER") {
+    router.push("/dashboard");
+  }
+
+  if (!session && status === "unauthenticated") {
+    router.push("/login");
+  }
 
   const fetchJobs = async () => {
     try {

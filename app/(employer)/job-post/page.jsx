@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { imageDB } from "@/lib/firebase/config";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
@@ -16,6 +17,16 @@ const JobPost = () => {
     location: "",
     requirements: "",
   });
+
+  const router = useRouter();
+
+  if (session && session.user.role === "JOB_SEEKER") {
+    router.push("/dashboard");
+  }
+
+  if (!session && status === "unauthenticated") {
+    router.push("/login");
+  }
 
   const [image, setImage] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);

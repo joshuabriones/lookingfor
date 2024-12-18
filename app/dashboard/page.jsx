@@ -9,15 +9,10 @@ import AdminDashboard from "@/components/Admin/AdminDashboard";
 
 const Dashboard = () => {
   const { data: session } = useSession();
-  console.log("ROLE: ", session?.role);
   const router = useRouter();
 
   if (session && !session.user.role) {
     router.push(`/additional-info?userId=${session.user.id}`);
-  }
-
-  if (!session) {
-    router.push("/login");
   }
 
   return (
