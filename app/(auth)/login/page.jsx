@@ -34,9 +34,9 @@ const Login = () => {
     }
   };
 
-  if (session) {
-    router.push("/dashboard");
-  }
+  // if (session) {
+  //   router.push("/dashboard");
+  // }
 
   return (
     <>

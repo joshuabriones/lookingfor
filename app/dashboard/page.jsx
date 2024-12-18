@@ -16,6 +16,10 @@ const Dashboard = () => {
     router.push(`/additional-info?userId=${session.user.id}`);
   }
 
+  if (!session) {
+    router.push("/login");
+  }
+
   return (
     <>
       {session?.role === "JOB_SEEKER" && <JobSeekerDashboard />}
