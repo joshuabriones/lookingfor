@@ -6,8 +6,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 const Login = () => {
+  const { data: session } = useSession();
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -31,6 +33,10 @@ const Login = () => {
       router.push("/dashboard");
     }
   };
+
+  if (session) {
+    router.push("/dashboard");
+  }
 
   return (
     <>

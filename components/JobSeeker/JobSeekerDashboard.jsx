@@ -11,6 +11,7 @@ const JobSeekerDashboard = () => {
   const { data: session } = useSession();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
   const fetchJobs = async () => {
     try {
@@ -30,12 +31,18 @@ const JobSeekerDashboard = () => {
     fetchJobs();
   }, []);
 
-  console.log(jobs);
+  const filteredJobs = jobs.filter((job) =>
+    job.title.toLowerCase().includes(searchInput.toLowerCase())
+  );
+
   return (
     <div className="max-w-screen-xl py-8 mx-auto ">
       <div className="px-6 pt-8 pb-6 rounded-xl bg-gradient-to-r from-purple-400 to-blue-500 text-white ">
         <h4 className="font-medium md:text-3xl text-2xl">
-          Welcome to L∞kingfor, {session.user.name.split(" ")[0]}
+          Welcome to L∞kingfor,{" "}
+          {session.user.name
+            ? session.user.name.split(" ")[0]
+            : session.image.split("=")[1].split("+").join(" ")}
         </h4>
         <div className="flex gap-4 mt-6 lg:flex-row flex-col">
           <div className="flex-1 p-4 rounded-lg bg-white bg-opacity-20">
@@ -126,13 +133,21 @@ const JobSeekerDashboard = () => {
       </div>
 
       <section id="hotjobs" className="mt-8">
-        <h1 className="font-medium text-2xl">Explore hot jobs on L∞kingfor</h1>
+        <div className="flex flex-col md:flex-row items-start gap-3 md:gap-0 md:items-center justify-between mb-8">
+          <h1 className="font-medium text-2xl">
+            Explore hot jobs on L∞kingfor
+          </h1>
+          <SearchInput
+            searchInput={searchInput}
+            setSearchInput={setSearchInput}
+          />
+        </div>
 
         {loading ? (
           <Loading />
         ) : (
           <div className="grid grid-cols-1 gap-8 mt-4 md:grid-cols-2 lg:grid-cols-3">
-            {jobs.map((job) => (
+            {filteredJobs.map((job) => (
               <Link
                 href="/findwork"
                 key={job.id}
@@ -175,3 +190,40 @@ const JobSeekerDashboard = () => {
 };
 
 export default JobSeekerDashboard;
+
+function SearchInput({ searchInput, setSearchInput }) {
+  return (
+    <div className="relative rounded-2xl md:w-1/2 w-full">
+      <label htmlFor="Search" className="sr-only">
+        Search
+      </label>
+      <input
+        type="text"
+        id="Search"
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        placeholder="Software Engineer, Web Developer, etc."
+        className="w-full rounded-lg border-2 border-purple-200 px-4 sm:py-3 py-2 pe-10 shadow-sm sm:text-sm"
+      />
+      <span className="absolute inset-y-0 end-0 grid w-10 place-content-center">
+        <button type="button" className="text-gray-600 hover:text-gray-700">
+          <span className="sr-only">Search</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="h-4 w-4"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
+          </svg>
+        </button>
+      </span>
+    </div>
+  );
+}

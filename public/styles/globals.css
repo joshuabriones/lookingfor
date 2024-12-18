@@ -30,6 +30,10 @@ html {
   .gradient-text {
     @apply bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent;
   }
+
+  .gradient-bg {
+    @apply bg-gradient-to-r from-purple-400 to-blue-500;
+  }
 }
 
 #hero_section {

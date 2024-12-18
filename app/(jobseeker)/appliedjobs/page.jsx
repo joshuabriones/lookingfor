@@ -17,6 +17,11 @@ const Appliedjobs = () => {
     try {
       const res = await fetch(`/api/users/${session.user.id}`);
       const data = await res.json();
+
+      if (data.status === 404) {
+        return setAppliedJobs([]);
+      }
+
       setAppliedJobs(data.applications);
     } catch (error) {
       console.error(error);

@@ -6,8 +6,10 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 const Signup = () => {
+  const { data: session } = useSession();
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -15,6 +17,10 @@ const Signup = () => {
   });
 
   const router = useRouter();
+
+  if (session) {
+    router.push("/dashboard");
+  }
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
