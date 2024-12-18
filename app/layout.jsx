@@ -19,6 +19,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/assets/images/looglingforlogo.png" />
+      </head>
       <body className={poppins.className}>
         <Provider>
           <Navbar />

@@ -49,6 +49,8 @@ export async function middleware(req) {
   return NextResponse.next();
 }
 
+// it's good???
+
 // Apply middleware to relevant routes
 export const config = {
   matcher: [
